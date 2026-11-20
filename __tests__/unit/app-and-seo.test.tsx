@@ -116,16 +116,26 @@ describe('app and seo', () => {
   });
 
   it('renders tool components', () => {
+    const simState = {
+      crontab: '',
+      expression: '*/5 * * * *',
+      mode: 'crontab' as const,
+      referenceIso: '2026-11-20T21:00:00.000Z',
+      lastCount: 5,
+      nextCount: 5,
+      filter: '',
+    };
     render(
       <>
         <ToolToolbar />
-        <ToolSidebar text="Hello world" fontSize={16} onFontSizeChange={() => {}} />
-        <ToolCanvas text="" fontSize={16} />
+        <ToolSidebar state={simState} onChange={() => {}} />
+        <ToolCanvas jobs={[]} errors={[]} skipped={0} />
       </>
     );
 
     expect(screen.getByRole('link', { name: 'Open help page' })).toBeInTheDocument();
-    expect(screen.getByText('11')).toBeInTheDocument(); // char count for "Hello world"
-    expect(screen.getByRole('application', { name: 'Notepad canvas' })).toBeInTheDocument();
+    expect(screen.getByLabelText('Crontab content')).toBeInTheDocument();
+    expect(screen.getByRole('application', { name: 'Crontab simulation results' })).toBeInTheDocument();
+    expect(screen.getByTestId('cron-empty-state')).toBeInTheDocument();
   });
 });

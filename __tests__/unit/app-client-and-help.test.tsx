@@ -22,6 +22,16 @@ const mockHandleExport = vi.fn();
 const mockImport = vi.fn();
 const mockToolbarActions = { canUndo: true, canRedo: true, onUndo: vi.fn(), onRedo: vi.fn() };
 
+const mockSimulatorState = {
+  crontab: '*/5 * * * * tick.sh',
+  expression: '*/5 * * * *',
+  mode: 'crontab',
+  referenceIso: '2026-11-20T21:00:00.000Z',
+  lastCount: 5,
+  nextCount: 5,
+  filter: '',
+};
+
 vi.mock('@itsjust/core', () => ({
   ToolShell: ({ toolbar, sidebar, canvas, statusBar }: Record<string, unknown>) => (
     <div>
@@ -38,7 +48,7 @@ vi.mock('@itsjust/core', () => ({
   ),
   useTool: () => ({
     state: {
-      data: { text: 'Hello' },
+      data: mockSimulatorState,
       setData: mockSetData,
       isDirty: false,
       lastSaved: 'just now',
@@ -54,26 +64,26 @@ vi.mock('@itsjust/core', () => ({
 
 vi.mock('@/tool', () => ({
   toolConfig: {
-    id: 'simple-notepad',
-    name: 'Notepad',
+    id: 'tool-1795205067',
+    name: 'Crontab Simulator',
     version: '1.0.0',
     features: { sidebar: true },
-    theme: { brand: 'Notepad' },
   },
   templateBaseVersion: '1.1.0',
-  ToolCanvas: ({ text }: { text: string }) => <div>canvas:{text}</div>,
+  ToolCanvas: () => <div>canvas</div>,
   ToolToolbar: () => <div>toolbar</div>,
-  ToolSidebar: ({ text }: { text: string }) => <div>sidebar:{text}</div>,
+  ToolSidebar: () => <div>sidebar</div>,
 }));
 
-vi.mock('@/tool/notepad-state', () => ({
-  notepadTool: {
+vi.mock('@/tool/tool-definition', () => ({
+  crontabSimulatorTool: {
     serialize: (state: unknown) => JSON.stringify(state),
-    deserialize: () => ({ success: true, data: { content: 'From Shared Url', title: '' } }),
+    deserialize: () => ({ success: true, data: mockSimulatorState }),
   },
+  simulate: () => ({ jobs: [], errors: [], skipped: 0 }),
 }));
 
-describe('app client and help page', () => {
+describe('app client', () => {
   beforeEach(() => {
     mockSetData.mockReset();
     mockToast.mockReset();
@@ -99,6 +109,7 @@ describe('app client and help page', () => {
     expect(screen.getByText('toolbar')).toBeInTheDocument();
     fireEvent.click(screen.getByText('trigger-share'));
 
+    await Promise.resolve();
     expect(mockToast).toHaveBeenCalled();
   });
 });
