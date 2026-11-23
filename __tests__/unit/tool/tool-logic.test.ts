@@ -40,9 +40,7 @@ describe('crontab simulator tool state', () => {
   it('rejects malformed state objects', () => {
     expect(crontabSimulatorTool.deserialize(null).success).toBe(false);
     expect(crontabSimulatorTool.deserialize({}).success).toBe(false);
-    expect(
-      crontabSimulatorTool.deserialize({ ...makeState(), mode: 'bogus' }).success
-    ).toBe(false);
+    expect(crontabSimulatorTool.deserialize({ ...makeState(), mode: 'bogus' }).success).toBe(false);
     const def = new CrontabSimulatorToolDefinition();
     expect(def.deserialize('not json').success).toBe(false);
   });
@@ -121,7 +119,9 @@ describe('simulate (single mode)', () => {
     const result = simulate(state);
     expect(result.jobs).toHaveLength(0);
     expect(result.errors).toHaveLength(1);
-    expect(result.errors[0]!.message).toMatch(/Invalid cron expression|Expected 5 fields|Invalid value/);
+    expect(result.errors[0]!.message).toMatch(
+      /Invalid cron expression|Expected 5 fields|Invalid value/
+    );
   });
 
   it('single-mode filter applies and returns empty when no match', () => {

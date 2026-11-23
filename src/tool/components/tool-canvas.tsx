@@ -75,7 +75,12 @@ function JobCard({ job }: { job: SimulatedJob }) {
 
 export function ToolCanvas({ jobs, errors, skipped, canvasRef }: ToolCanvasProps) {
   return (
-    <div ref={canvasRef} className="cron-canvas" role="application" aria-label="Crontab simulation results">
+    <div
+      ref={canvasRef}
+      className="cron-canvas"
+      role="application"
+      aria-label="Crontab simulation results"
+    >
       {errors.length > 0 && (
         <div className="cron-errors" role="alert" data-testid="cron-errors">
           <h3>Validation errors</h3>
@@ -89,7 +94,8 @@ export function ToolCanvas({ jobs, errors, skipped, canvasRef }: ToolCanvasProps
       )}
       {skipped > 0 && (
         <p className="cron-skipped" data-testid="cron-skipped">
-          {skipped} line{skipped === 1 ? '' : 's'} skipped (comments, blank lines, or non-simulatable entries).
+          {skipped} line{skipped === 1 ? '' : 's'} skipped (comments, blank lines, or
+          non-simulatable entries).
         </p>
       )}
       {jobs.length === 0 && errors.length === 0 && (
@@ -97,7 +103,11 @@ export function ToolCanvas({ jobs, errors, skipped, canvasRef }: ToolCanvasProps
           No jobs to simulate yet. Paste a crontab or enter a cron expression.
         </p>
       )}
-      <div className="cron-jobs">{jobs.map((job) => <JobCard key={`${job.lineIndex}-${job.original}`} job={job} />)}</div>
+      <div className="cron-jobs">
+        {jobs.map((job) => (
+          <JobCard key={`${job.lineIndex}-${job.original}`} job={job} />
+        ))}
+      </div>
     </div>
   );
 }

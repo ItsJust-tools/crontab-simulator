@@ -10,11 +10,7 @@ import {
   formatDateTime,
   type ParsedCronLine,
 } from './cron-engine';
-import type {
-  CrontabSimulatorState,
-  CrontabSimulatorError,
-  SimulatedJob,
-} from './types';
+import type { CrontabSimulatorState, CrontabSimulatorError, SimulatedJob } from './types';
 import { DEFAULT_LAST_COUNT, DEFAULT_NEXT_COUNT } from './types';
 
 function referenceDate(state: CrontabSimulatorState): Date {
@@ -84,7 +80,11 @@ export function simulate(state: CrontabSimulatorState): SimulationResult {
   let skipped = 0;
   for (const line of lines) {
     if (line.kind === 'invalid') {
-      errors.push({ raw: line.raw, lineIndex: line.lineIndex, message: line.error ?? 'Invalid line' });
+      errors.push({
+        raw: line.raw,
+        lineIndex: line.lineIndex,
+        message: line.error ?? 'Invalid line',
+      });
       continue;
     }
     if (line.kind === 'env' || line.kind === 'alias-unsupported') {

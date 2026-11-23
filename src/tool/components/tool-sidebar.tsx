@@ -13,15 +13,15 @@ const HELP_LINK = 'https://man7.org/linux/man-pages/man5/crontab.5.html';
 export function ToolSidebar({ state, onChange }: ToolSidebarProps) {
   const handleCrontabChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => onChange({ crontab: e.target.value }),
-    [onChange],
+    [onChange]
   );
   const handleExpressionChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => onChange({ expression: e.target.value }),
-    [onChange],
+    [onChange]
   );
   const handleFilterChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => onChange({ filter: e.target.value }),
-    [onChange],
+    [onChange]
   );
   const handleReferenceChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +31,7 @@ export function ToolSidebar({ state, onChange }: ToolSidebarProps) {
       if (Number.isNaN(date.getTime())) return;
       onChange({ referenceIso: date.toISOString() });
     },
-    [onChange],
+    [onChange]
   );
 
   return (

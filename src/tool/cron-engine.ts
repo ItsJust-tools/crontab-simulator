@@ -53,12 +53,28 @@ export function isCronJob(line: ParsedCronLine): line is CronJob {
 }
 
 const MONTH_NAMES: Record<string, number> = {
-  JAN: 1, FEB: 2, MAR: 3, APR: 4, MAY: 5, JUN: 6,
-  JUL: 7, AUG: 8, SEP: 9, OCT: 10, NOV: 11, DEC: 12,
+  JAN: 1,
+  FEB: 2,
+  MAR: 3,
+  APR: 4,
+  MAY: 5,
+  JUN: 6,
+  JUL: 7,
+  AUG: 8,
+  SEP: 9,
+  OCT: 10,
+  NOV: 11,
+  DEC: 12,
 };
 
 const DOW_NAMES: Record<string, number> = {
-  SUN: 0, MON: 1, TUE: 2, WED: 3, THU: 4, FRI: 5, SAT: 6,
+  SUN: 0,
+  MON: 1,
+  TUE: 2,
+  WED: 3,
+  THU: 4,
+  FRI: 5,
+  SAT: 6,
 };
 
 const ALIASES: Record<string, string> = {
@@ -83,7 +99,7 @@ function parseField(
   text: string,
   min: number,
   max: number,
-  names?: Record<string, number>,
+  names?: Record<string, number>
 ): CronFieldSpec {
   const values = new Set<number>();
   let wildcard = false;
@@ -144,7 +160,7 @@ function parseField(
 function resolveFieldToken(
   tokenRaw: string,
   names: Record<string, number> | undefined,
-  fieldText: string,
+  fieldText: string
 ): number {
   const token = tokenRaw.trim().toUpperCase();
   if (names && token in names) return names[token] as number;
@@ -161,11 +177,15 @@ export function parseCronExpression(expression: string): CronExpression {
   const fields = trimmed.split(' ');
   if (fields.length !== 5) {
     throw new Error(
-      `Expected 5 fields (minute hour day-of-month month day-of-week), got ${fields.length}`,
+      `Expected 5 fields (minute hour day-of-month month day-of-week), got ${fields.length}`
     );
   }
   const names: Array<Record<string, number> | undefined> = [
-    MONTH_NAMES, MONTH_NAMES, undefined, MONTH_NAMES, DOW_NAMES,
+    MONTH_NAMES,
+    MONTH_NAMES,
+    undefined,
+    MONTH_NAMES,
+    DOW_NAMES,
   ];
   const specs: CronFieldSpec[] = [];
   try {
@@ -175,7 +195,7 @@ export function parseCronExpression(expression: string): CronExpression {
     }
   } catch (err) {
     throw new Error(
-      `Invalid cron expression "${trimmed}": ${err instanceof Error ? err.message : String(err)}`,
+      `Invalid cron expression "${trimmed}": ${err instanceof Error ? err.message : String(err)}`
     );
   }
   return {
@@ -193,11 +213,7 @@ function fieldMatches(spec: CronFieldSpec, value: number): boolean {
 }
 
 /** Standard cron day matching: both dom & dow restricted -> either may match. */
-function dayMatches(
-  date: Date,
-  dom: CronFieldSpec,
-  dow: CronFieldSpec,
-): boolean {
+function dayMatches(date: Date, dom: CronFieldSpec, dow: CronFieldSpec): boolean {
   const domMatch = fieldMatches(dom, date.getDate());
   const dowMatch = fieldMatches(dow, date.getDay());
   if (dom.wildcard && dow.wildcard) return true;
@@ -220,7 +236,7 @@ function collectTimes(
   expression: CronExpression,
   reference: Date,
   count: number,
-  direction: 1 | -1,
+  direction: 1 | -1
 ): Date[] {
   const results: Date[] = [];
   if (count <= 0) return results;
@@ -237,19 +253,11 @@ function collectTimes(
   return results;
 }
 
-export function nextFireTimes(
-  expression: CronExpression,
-  reference: Date,
-  count: number,
-): Date[] {
+export function nextFireTimes(expression: CronExpression, reference: Date, count: number): Date[] {
   return collectTimes(expression, reference, count, 1);
 }
 
-export function lastFireTimes(
-  expression: CronExpression,
-  reference: Date,
-  count: number,
-): Date[] {
+export function lastFireTimes(expression: CronExpression, reference: Date, count: number): Date[] {
   // Walk backwards; reverse so most recent is last.
   return collectTimes(expression, reference, count, -1).reverse();
 }
@@ -292,11 +300,16 @@ function describeField(spec: CronFieldSpec, min: number, max: number): string {
 export function explainExpression(expression: CronExpression): string {
   const rangeFor = (key: keyof Omit<CronExpression, 'original'>): [number, number] => {
     switch (key) {
-      case 'minute': return FIELD_RANGES[0] as [number, number];
-      case 'hour': return FIELD_RANGES[1] as [number, number];
-      case 'dayOfMonth': return FIELD_RANGES[2] as [number, number];
-      case 'month': return FIELD_RANGES[3] as [number, number];
-      case 'dayOfWeek': return FIELD_RANGES[4] as [number, number];
+      case 'minute':
+        return FIELD_RANGES[0] as [number, number];
+      case 'hour':
+        return FIELD_RANGES[1] as [number, number];
+      case 'dayOfMonth':
+        return FIELD_RANGES[2] as [number, number];
+      case 'month':
+        return FIELD_RANGES[3] as [number, number];
+      case 'dayOfWeek':
+        return FIELD_RANGES[4] as [number, number];
     }
   };
   return FIELD_LABELS.map(([key, label]) => {

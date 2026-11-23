@@ -11,17 +11,8 @@ import {
 } from 'react';
 import { ToolShell, useTool, ImportExport } from '@itsjust/core';
 import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from 'lz-string';
-import {
-  toolConfig,
-  templateBaseVersion,
-  ToolCanvas,
-  ToolToolbar,
-  ToolSidebar,
-} from '@/tool';
-import {
-  crontabSimulatorTool as crontabToolDef,
-  simulate,
-} from '@/tool/tool-definition';
+import { toolConfig, templateBaseVersion, ToolCanvas, ToolToolbar, ToolSidebar } from '@/tool';
+import { crontabSimulatorTool as crontabToolDef, simulate } from '@/tool/tool-definition';
 import type { CrontabSimulatorState } from '@/tool/types';
 
 export default function ToolClient() {
@@ -104,10 +95,7 @@ export default function ToolClient() {
     }
   }, [showToast, tool.state.data]);
 
-  const simulation = useMemo(
-    () => simulate(tool.state.data),
-    [tool.state.data]
-  );
+  const simulation = useMemo(() => simulate(tool.state.data), [tool.state.data]);
 
   const toolbarContent = (
     <>
@@ -123,9 +111,7 @@ export default function ToolClient() {
     </>
   );
 
-  const sidebarContent = (
-    <ToolSidebar state={tool.state.data} onChange={handleChange} />
-  );
+  const sidebarContent = <ToolSidebar state={tool.state.data} onChange={handleChange} />;
 
   const canvasContent = (
     <ToolCanvas
@@ -140,7 +126,9 @@ export default function ToolClient() {
     <>
       <span className="status-slot status-slot-state">
         {simulation.jobs.length} job{simulation.jobs.length === 1 ? '' : 's'}
-        {simulation.errors.length > 0 ? `, ${simulation.errors.length} error${simulation.errors.length === 1 ? '' : 's'}` : ''}
+        {simulation.errors.length > 0
+          ? `, ${simulation.errors.length} error${simulation.errors.length === 1 ? '' : 's'}`
+          : ''}
       </span>
       <span
         className={`status-slot status-slot-state ${tool.state.isDirty ? 'status-unsaved' : 'status-saved'}`}

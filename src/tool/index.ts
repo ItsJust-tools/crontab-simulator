@@ -15,9 +15,4 @@ export { ToolCanvas } from './components/tool-canvas';
 export { ToolToolbar } from './components/tool-toolbar';
 export { ToolSidebar } from './components/tool-sidebar';
 export type { CrontabSimulatorState, SimulatedJob, CrontabSimulatorError } from './types';
-export type {
-  CronExpression,
-  CronFieldSpec,
-  ParsedCronLine,
-  CronJob,
-} from './cron-engine';
+export type { CronExpression, CronFieldSpec, ParsedCronLine, CronJob } from './cron-engine';
